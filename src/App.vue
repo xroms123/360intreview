@@ -1,28 +1,25 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <div>aaa</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import firebase from 'firebase';
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  created() {
+    // Fetcth VR data from firebase
+    const liveTourId = "554149"
+    const VRCamFirebase = firebase.initializeApp({
+      databaseURL: 'https://vr-cam-161603.firebaseio.com',
+      serviceAccount: require('../disc/serviceAccountKey.json')
+    })
+    const fetchPanoramas = VRCamFirebase.database().ref('/panoramas').orderByChild('Building').equalTo(liveTourId)
+    fetchPanoramas.once('value', snapshot => {
+      console.log(snapshot.val())
+    })
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
