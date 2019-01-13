@@ -1,7 +1,23 @@
 <template>
 <div>
   <VRImage v-bind:src = "onsceneImage"/>
-  <div class = "menu">aaa</div>
+
+  <!-- Carousel -->
+  <div class = "menu">
+    <div class = "arrow" v-on:click = "leftClick"> < </div>
+      <div class = "menu-carousel">
+        <div class = "carousel-bar" ref = "carouselbar" 
+             v-bind:style = "{ transform: 'translateX(' +position+ 'px)' }">
+          <div class = "menu-item" 
+              v-for = "item in images"
+              v-on:click = "vrClick(item.url)">
+            <img v-bind:src = "item.thumbnail">
+            {{item.category}}
+          </div>
+        </div>
+      </div>
+    <div class = "arrow" v-on:click = "rightClick"> > </div>
+  </div>
 </div>
 
   
@@ -18,7 +34,9 @@ export default {
     return {
       liveTourId: 'c951a5af-603f-4003-9d1c-707657febe95',
       images: [],
-      onsceneImage: ""
+      onsceneImage: "",
+      position: 0,
+      carouselWidth: "0"
     }
   },
   created() {
@@ -39,8 +57,31 @@ export default {
         })
       }
       this.onsceneImage = this.images[0].url
-      console.log(snapshotData)
+      setTimeout(() => {
+        this.carouselWidth = this.$refs.carouselbar.clientWidth
+      }, 100)
+
+
     })
+
+
+  },
+  methods: {
+    vrClick: function (url) {
+      this.onsceneImage = url
+    },
+    leftClick: function () {
+      let nextPosition = this.position + 175;
+      if (nextPosition <= 0) {
+        this.position = nextPosition
+      }
+    },
+    rightClick: function () {
+      let nextPosition = this.position - 175;
+      if (nextPosition > -(this.carouselWidth)) {
+        this.position = nextPosition;
+      }
+    }
   }
 }
 </script>
@@ -48,9 +89,36 @@ export default {
 <style scoped>
 .menu {
   width: 100%;
-  height: 100px;
+  height: 150px;
   position: fixed;
   bottom: 0;
-  background-color: navajowhite;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(182, 182, 182, 0.3);
+}
+.menu-carousel {
+  width: 95%;
+  height: 140px;
+  overflow: hidden;
+}
+.carousel-bar {
+  height: 140px;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 1s ease;
+  color: white;
+}
+.menu-item {
+  width: 160px;
+  height: 100px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+.menu-item img {
+  max-width: 100%;
+}
+.arrow {
+  margin: 10px;
 }
 </style>
