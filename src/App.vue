@@ -1,50 +1,56 @@
 <template>
-  <a-scene>
-    <a-assets>
-      <!-- Images. -->
-      <!-- <img
-        id="city"
-        src="http://ac-0uhksb6k.clouddn.com/295312cf96a748ce62f5.jpg?imageView2/2/w/4096/h/2048/q/100/format/jpg"
-      >-->
-      <img
-        id="city"
-        src="https://dn-0uhksb6K.qbox.me/b193d3b6401aca9c744a.jpg?imageView2/2/w/4096/h/2048/q/100/format/jpg"
-      >
-    </a-assets>
+<div>
+  <VRImage v-bind:src = "onsceneImage"/>
+  <div class = "menu">aaa</div>
+</div>
 
-    <!-- 360-degree image. -->
-    <a-sky id="image-360" radius="10" src="#city"></a-sky>
-  </a-scene>
+  
 </template>
 
 <script>
 import firebase from 'firebase';
-
+import VRImage from './components/vrImage.vue';
 export default {
+  components: {
+    'VRImage': VRImage
+  },
   data() {
     return {
-      images: []
+      liveTourId: 'c951a5af-603f-4003-9d1c-707657febe95',
+      images: [],
+      onsceneImage: ""
     }
   },
   created() {
     // Fetcth VR data from firebase
-    const liveTourId = "554149"
     const VRCamFirebase = firebase.initializeApp({
       databaseURL: 'https://vr-cam-161603.firebaseio.com',
       serviceAccount: require('../disc/serviceAccountKey.json')
     })
-    const fetchPanoramas = VRCamFirebase.database().ref('/panoramas').orderByChild('Building').equalTo(liveTourId)
+
+    const fetchPanoramas = VRCamFirebase.database().ref('/panoramas').orderByChild('Building').equalTo(this.liveTourId)
     fetchPanoramas.once('value', snapshot => {
       let snapshotData = snapshot.val()
-      // for (let i in snapshotData) {
-      //   this.images.push(snapshotData[i].data.desktopUrl)
-      // }
-      // console.log(this.images)
+      for (let i in snapshotData) {
+        this.images.push({
+          category: snapshotData[i].data.category,
+          url: snapshotData[i].data.desktopUrl,
+          thumbnail: snapshotData[i].data.thumbnail
+        })
+      }
+      this.onsceneImage = this.images[0].url
       console.log(snapshotData)
     })
   }
 }
 </script>
 
-<style>
+<style scoped>
+.menu {
+  width: 100%;
+  height: 100px;
+  position: fixed;
+  bottom: 0;
+  background-color: navajowhite;
+}
 </style>
