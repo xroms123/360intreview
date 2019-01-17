@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+require('aframe-animation-component');
 Vue.config.productionTip = false
 
 new Vue({

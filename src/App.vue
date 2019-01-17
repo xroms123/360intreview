@@ -1,6 +1,6 @@
 <template>
 <div>
-  <VRImage v-bind:src = "onsceneImage"/>
+  <VRImage v-bind:src = "onsceneImage" v-bind:show = "isShow"/>
 
   <!-- Carousel -->
   <div class = "menu">
@@ -36,7 +36,8 @@ export default {
       images: [],
       onsceneImage: "",
       position: 0,
-      carouselWidth: "0"
+      carouselWidth: "0",
+      isShow: false
     }
   },
   created() {
@@ -60,15 +61,19 @@ export default {
       setTimeout(() => {
         this.carouselWidth = this.$refs.carouselbar.clientWidth
       }, 100)
-
-
     })
-
+    this.isShow = true;
 
   },
   methods: {
     vrClick: function (url) {
-      this.onsceneImage = url
+      this.isShow = false;
+      setTimeout(() => {
+        this.onsceneImage = url;
+        setTimeout(() => {
+          this.isShow = true;
+        }, 1500);
+      }, 1000)
     },
     leftClick: function () {
       let nextPosition = this.position + 175;
@@ -119,6 +124,7 @@ export default {
   max-width: 100%;
 }
 .arrow {
+  cursor: pointer;
   margin: 10px;
 }
 </style>
