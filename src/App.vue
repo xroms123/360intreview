@@ -44,7 +44,7 @@ export default {
     // Fetcth VR data from firebase
     const VRCamFirebase = firebase.initializeApp({
       databaseURL: 'https://vr-cam-161603.firebaseio.com',
-      serviceAccount: require('../disc/serviceAccountKey.json')
+      serviceAccount: require('./serviceAccountKey.json')
     })
 
     const fetchPanoramas = VRCamFirebase.database().ref('/panoramas').orderByChild('Building').equalTo(this.liveTourId)
@@ -68,12 +68,15 @@ export default {
   methods: {
     vrClick: function (url) {
       this.isShow = false;
-      setTimeout(() => {
-        this.onsceneImage = url;
+      let changeUrl = new Promise((resolve, reject) => {
+        this.onsceneImage = url
+        resolve();
+      })
+      changeUrl.then((res) => {
         setTimeout(() => {
           this.isShow = true;
-        }, 1500);
-      }, 1000)
+        }, 2000);
+      })
     },
     leftClick: function () {
       let nextPosition = this.position + 175;
