@@ -72,7 +72,7 @@ export default {
         this.onsceneImage = url
         resolve();
       })
-      changeUrl.then((res) => {
+      changeUrl.then(() => {
         setTimeout(() => {
           this.isShow = true;
         }, 2000);
