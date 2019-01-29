@@ -1,6 +1,7 @@
 <template>
 <div>
   <VRImage v-bind:src = "onsceneImage" v-bind:show = "isShow"/>
+  <!-- <router-view></router-view> -->
 
   <!-- Carousel -->
   <div class = "menu">
