@@ -1,8 +1,8 @@
 <template>
 <div class = "scene" v-bind:class = "{'show' : show}">
   <a-scene>
-    <a-sky id="image-360" position="0 0 0" radius="10" v-bind:src = "src">
-      <a-animation attribute="rotation" dur="8000" from="90 0 0" to="0 0 0"></a-animation>
+    <a-sky id="image-360" position="0 0 0" radius="25" v-bind:src = "src">
+      <a-animation attribute="rotation" dur="5000" from="90 0 0" to="0 0 0"></a-animation>
     </a-sky>
   </a-scene>
 </div>

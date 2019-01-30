@@ -1,24 +1,6 @@
 <template>
 <div>
   <VRImage v-bind:src = "onsceneImage" v-bind:show = "isShow"/>
-  <!-- <router-view></router-view> -->
-
-  <!-- Carousel -->
-  <div class = "menu">
-    <div class = "arrow" v-on:click = "leftClick"> < </div>
-      <div class = "menu-carousel">
-        <div class = "carousel-bar" ref = "carouselbar" 
-             v-bind:style = "{ transform: 'translateX(' +position+ 'px)' }">
-          <div class = "menu-item" 
-              v-for = "item in images"
-              v-on:click = "vrClick(item.url)">
-            <img v-bind:src = "item.thumbnail">
-            {{item.category}}
-          </div>
-        </div>
-      </div>
-    <div class = "arrow" v-on:click = "rightClick"> > </div>
-  </div>
 </div>
 
   
@@ -27,70 +9,24 @@
 <script>
 import firebase from 'firebase';
 import VRImage from './components/vrImage.vue';
+import Fuji from './fuji.jpg';
+
 export default {
   components: {
     'VRImage': VRImage
   },
   data() {
     return {
-      liveTourId: 'c951a5af-603f-4003-9d1c-707657febe95',
-      images: [],
-      onsceneImage: "",
-      position: 0,
-      carouselWidth: "0",
+      onsceneImage: Fuji,
       isShow: false
     }
   },
   created() {
-    // Fetcth VR data from firebase
-    const VRCamFirebase = firebase.initializeApp({
-      databaseURL: 'https://vr-cam-161603.firebaseio.com',
-      serviceAccount: require('./serviceAccountKey.json')
-    })
-
-    const fetchPanoramas = VRCamFirebase.database().ref('/panoramas').orderByChild('Building').equalTo(this.liveTourId)
-    fetchPanoramas.once('value', snapshot => {
-      let snapshotData = snapshot.val()
-      for (let i in snapshotData) {
-        this.images.push({
-          category: snapshotData[i].data.category,
-          url: snapshotData[i].data.desktopUrl,
-          thumbnail: snapshotData[i].data.thumbnail
-        })
-      }
-      this.onsceneImage = this.images[0].url
-      setTimeout(() => {
-        this.carouselWidth = this.$refs.carouselbar.clientWidth
-      }, 100)
-    })
     this.isShow = true;
 
   },
   methods: {
-    vrClick: function (url) {
-      this.isShow = false;
-      let changeUrl = new Promise((resolve, reject) => {
-        this.onsceneImage = url
-        resolve();
-      })
-      changeUrl.then(() => {
-        setTimeout(() => {
-          this.isShow = true;
-        }, 2000);
-      })
-    },
-    leftClick: function () {
-      let nextPosition = this.position + 175;
-      if (nextPosition <= 0) {
-        this.position = nextPosition
-      }
-    },
-    rightClick: function () {
-      let nextPosition = this.position - 175;
-      if (nextPosition > -(this.carouselWidth)) {
-        this.position = nextPosition;
-      }
-    }
+
   }
 }
 </script>
